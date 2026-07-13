@@ -757,7 +757,7 @@ function ReportComposer({ ward, setScreen, setCurrentComplaint, setComplaintHist
   const detected = useMemo(() => detectComplaint(description, ward), [description, ward])
   const [manualFields, setManualFields] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
-const [submitMessage, setSubmitMessage] = useState('')
+  const [submitMessage, setSubmitMessage] = useState('')
   const hasComplaintText = description.trim().length > 0
   const emptyFields = { category: '', urgency: '', location: '', routing: '' }
   const fields = hasComplaintText ? manualFields || detected : emptyFields
@@ -975,60 +975,6 @@ function Tracker({ notify, setNotify, complaint }) {
       </div>
     </div>
   )
-}
-
-const budgetCategories = [
-  { id: 'roads', label: 'Roads & potholes', icon: '🚧' },
-  { id: 'water', label: 'Water supply', icon: '💧' },
-  { id: 'sanitation', label: 'Sanitation', icon: '🗑️' },
-  { id: 'streetlights', label: 'Streetlights', icon: '💡' },
-  { id: 'parks', label: 'Parks', icon: '🌳' },
-]
-
-const playgroundWards = ['Panvel Ward 1', 'Panvel Ward 2', 'Panvel Ward 3', 'Panvel Ward 4', 'Panvel Ward 5']
-
-const TOTAL_BUDGET = 100 // lakhs (₹1 crore)
-const BASELINE = 20 // lakhs, default per category
-
-function clampScore(value) {
-  return Math.max(0, Math.min(100, Math.round(value)))
-}
-
-function scoreFromAllocations(allocations) {
-  const d = (id) => allocations[id] - BASELINE
-  const safety = clampScore(40 + d('roads') * 0.4 + d('streetlights') * 0.6 + d('sanitation') * 0.1)
-  const health = clampScore(40 + d('water') * 0.5 + d('sanitation') * 0.5)
-  const mobility = clampScore(40 + d('roads') * 0.6 + d('streetlights') * 0.2)
-  const qualityOfLife = clampScore(40 + d('parks') * 0.6 + d('water') * 0.2 + d('sanitation') * 0.2)
-  const overall = Math.round((safety + health + mobility + qualityOfLife) / 4)
-  return { safety, health, mobility, qualityOfLife, overall }
-}
-
-function scoreTier(overall) {
-  if (overall >= 70) return 'Great'
-  if (overall >= 50) return 'Good'
-  return 'Needs work'
-}
-
-function buildWardEvents(allocations) {
-  const d = (id) => allocations[id] - BASELINE
-  return [
-    d('roads') >= 5
-      ? { icon: '✅', text: 'Roads repaired — fewer bike accidents reported this week' }
-      : { icon: '⚠️', text: 'Roads still damaged — bike accidents reported this week' },
-    d('water') >= 5
-      ? { icon: '✅', text: 'Water supply improved — fewer families rely on tankers' }
-      : { icon: '🚱', text: 'Water supply still disrupted — families buying tankers' },
-    d('sanitation') >= 5
-      ? { icon: '✅', text: 'Daily collection started — overflowing bins cleared faster' }
-      : { icon: '🗑️', text: 'Garbage collection irregular — bins overflow for days' },
-    d('streetlights') >= 5
-      ? { icon: '💡', text: 'Street lights fixed on more roads — night safety improves' }
-      : { icon: '🌑', text: 'Streets remain poorly lit at night' },
-    d('parks') >= 5
-      ? { icon: '🌳', text: 'Park benches restored — more residents visit daily' }
-      : { icon: '🥀', text: 'Parks remain neglected, low footfall' },
-  ]
 }
 
 const budgetCategories = [
