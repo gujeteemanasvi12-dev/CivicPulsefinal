@@ -756,6 +756,8 @@ function ReportComposer({ ward, setScreen, setCurrentComplaint, setComplaintHist
   const [description, setDescription] = useState('')
   const detected = useMemo(() => detectComplaint(description, ward), [description, ward])
   const [manualFields, setManualFields] = useState(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+const [submitMessage, setSubmitMessage] = useState('')
   const hasComplaintText = description.trim().length > 0
   const emptyFields = { category: '', urgency: '', location: '', routing: '' }
   const fields = hasComplaintText ? manualFields || detected : emptyFields
